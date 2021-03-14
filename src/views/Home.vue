@@ -4,11 +4,15 @@
             <div class="shots-circle"></div>
             <div class="shots-area" ref="shotArea">
                 <div
+                    ref="titlePosition"
                     class="title"
                     @mouseenter="openInput"
                     @mouseleave="closeInput"
+                    style="top:10%"
                 >
-                    {{ title }}<br />
+                <p ref="title">
+                {{ title }}
+                </p>
                     <input
                         type="text"
                         v-model="title"
@@ -34,6 +38,29 @@
                 />
             </label>
         </div>
+        <ul class="options">
+            <li class="color">color
+                <ul class="sub">
+                    <li @click="titleColorHandler('red')">red</li>
+                    <li @click="titleColorHandler('white')">white</li>
+                    <li @click="titleColorHandler('black')">black</li>
+                </ul>
+            </li> 
+            <li class="size">size
+                 <ul class="sub">
+                    <li @click="titleSizeHandler('36px')">large</li>
+                    <li @click="titleSizeHandler('30px')">medium </li>
+                    <li @click="titleSizeHandler('24px')">small</li>
+                </ul>
+            </li> 
+            <li class="position">position
+                <ul class="sub">
+                    <li @click="titlePositionHandler('top')">top</li>
+                    <li @click="titlePositionHandler('middle')">middle </li>
+                    <li @click="titlePositionHandler('bottom')">bottom</li>
+                </ul>
+            </li> 
+        </ul>
     </div>
 </template>
 
@@ -44,6 +71,59 @@
     justify-content: center;
     align-items: center;
     height: 100%;
+    .options{
+        position: absolute;
+        right: 60px;
+        top: 60px;
+        li{
+            position: relative;
+            line-height: 2;
+            font-size: 24px;
+            padding: 0 14px;
+            cursor: pointer;
+        }
+        > li:hover{
+            background-color: #000;
+        }
+
+        .sub{
+            cursor: pointer;
+            width: 115px;
+            display: none;
+            position: absolute;
+            left: -100%;
+            top: 0;
+            color:#fff;
+            background-color: #000;
+        }
+        .sub li:hover{
+            background-color: #fff;
+            border: 1px solid #000;
+            color: #000;
+        }
+        .color:hover{
+            background-color: #000;
+            color:#fff;
+        }
+        .color:hover .sub{
+            display: block;
+        }
+        .size:hover{
+            background-color: #000;
+            color:#fff;
+        }
+        .size:hover .sub{
+            display: block;
+        }
+        .position:hover{
+            background-color: #000;
+            color:#fff;
+        }
+        .position:hover .sub{
+            display: block;
+        }
+     
+    }
     .shots-area-cover {
         position: relative;
         width: 80vh;
@@ -72,10 +152,11 @@
         bottom: -5px;
         border-radius: 50%;
         .title {
+            min-width: 100px;
+            height: 20px;
             text-align: center;
             font-size: 30px;
             position: absolute;
-            top: 10%;
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
@@ -97,7 +178,7 @@
             font-size: 20px;
             cursor: pointer;
             display: none;
-            z-index: 1;
+            z-index: 999;
         }
         &:hover:after {
             content: '';
@@ -129,6 +210,17 @@
 import html2canvas from 'html2canvas'
 export default {
     mounted() {
+        this.gsap.from(
+            '.options',
+            {
+                delay: 2,
+                opacity: 0,
+                duration: 1,
+                y: '100%',
+                ease: 'slow(0.7,0.7,0.7,0.7, false)',
+            },
+            1
+        )
         this.gsap.from(
             '.upload',
             {
@@ -169,6 +261,31 @@ export default {
     },
     name: 'Home',
     methods: {
+        titlePositionHandler(position){
+            console.log("p");
+            this.$refs.titlePosition.style.top = ""
+            this.$refs.titlePosition.style.left = ""
+            this.$refs.titlePosition.style.right = ""
+            this.$refs.titlePosition.style.bottom = ""
+            switch (position) {
+                case "top":
+                this.$refs.titlePosition.style.top = "10%"
+                break
+                case "bottom":
+                this.$refs.titlePosition.style.bottom = "10%"
+                break
+                case "middle":
+                this.$refs.titlePosition.style.top = "50%"
+                this.$refs.titlePosition.style.transform = "translate(-50%,-50%)"
+                break
+            }
+        },
+        titleSizeHandler(size){
+            this.$refs.title.style.fontSize= size
+        },
+        titleColorHandler(color){
+            this.$refs.title.style.color= color
+        },
         openInput() {
             this.$refs.typeTitle.style.display = 'block'
         },

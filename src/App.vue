@@ -18,8 +18,8 @@
             </div>
             <div class="nav">
                 <router-link to="/">home</router-link>
-                <router-link to="/">author</router-link>
-                <router-link to="/">other works</router-link>
+                <a href="https://abc820219.github.io/dist/#/home" target="_blank">author</a>
+                <a>other works</a>
                 <div class="record">record life</div>
             </div>
         </div>
@@ -28,9 +28,12 @@
         </div>
         <div class="sns">
             <ul>
-                <li>fb</li>
-                <li>tw</li>
-                <li>ig</li>
+                <li>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https://abc820219.github.io/dist/#/home">fb</a>
+                </li>
+                <li>
+                    <a href="https://twitter.com/intent/tweet?url=https://abc820219.github.io/dist/#/home&text=">tw</a>
+                </li>
             </ul>
         </div>
     </div>
@@ -113,6 +116,13 @@ export default {
     font-family: 'agency fb';
     letter-spacing: 2px;
     text-transform: uppercase;
+    a{
+        text-decoration: none;
+        color: #000;
+    }
+    .router-link-exact-active{
+          text-decoration: underline;
+    }
 }
 
 .guid {
