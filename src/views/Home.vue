@@ -91,7 +91,7 @@
             width: 115px;
             display: none;
             position: absolute;
-            left: -100%;
+            left: -115px;
             top: 0;
             color:#fff;
             background-color: #000;
@@ -255,7 +255,7 @@ export default {
     },
     data() {
         return {
-            title: 'type your title',
+            title: 'click here type your title',
             strDataURI: '',
         }
     },

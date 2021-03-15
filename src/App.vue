@@ -19,7 +19,7 @@
             <div class="nav">
                 <router-link to="/">home</router-link>
                 <a href="https://abc820219.github.io/dist/#/home" target="_blank">author</a>
-                <a>other works</a>
+                <a>others</a>
                 <div class="record">record life</div>
             </div>
         </div>
@@ -183,7 +183,7 @@ export default {
             display: flex;
             align-items: center;
             position: absolute;
-            left: -10%;
+            left: 0px;
             bottom: 100px;
             transform: rotate(-90deg);
             font-size: 16px;
