@@ -187,7 +187,7 @@ export default {
                     {
                         name: '任務1',
                         start: '2020/5/1',
-                        end: '2021/12/1',
+                        end: '2021/12/5',
                         progress: 50,
                     },
                 ]
@@ -198,7 +198,7 @@ export default {
         return {
             showType: 'month',
             year: 2021,
-            columnWidth: 3,
+            columnWidth: 2,
             height: 30,
         }
     },
@@ -207,7 +207,7 @@ export default {
             immediate: true,
             handler(newType) {
                 if (!newType) {
-                    this.columnWidth = 20
+                    this.columnWidth = 30
                 }
             },
         },
@@ -223,8 +223,6 @@ export default {
                 if (this.year < this.dayjs(task.start).year()) return task
                 let taskS = 0
                 let taskW = 0
-                // console.log('end:' + this.dayjs(task.end).year())
-                // console.log('start:' + this.dayjs(task.start).year())
                 if (
                     this.year == this.dayjs(task.start).year() &&
                     this.year == this.dayjs(task.end).year()
