@@ -1,5 +1,5 @@
 <template>
-    <div class="intro-cover">
+    <div class="intro-cover" v-if="flowSetting.isOpen">
         <div class="intro-target" id="intro-target">
             <div class="intro-content" id="intro-content">
                 <div class="intro-title">
@@ -24,7 +24,9 @@ export default {
         flowSetting: {
             type: Object,
             default() {
-                return {}
+                return {
+                    isOpen: false,
+                }
             },
         },
     },
@@ -32,11 +34,11 @@ export default {
     data() {
         return {
             flowsFuncs: [],
+            elems: [],
             step: -1,
             curNextFunc: null,
             curPreFunc: null,
             curTaget: null,
-            padding: 3,
             curContent: '',
         }
     },
@@ -47,16 +49,15 @@ export default {
                 ({ target, content, curfunc, prefunc, nextfunc }) => {
                     console.log(target, content, curfunc)
                     const IntroTarget = document.querySelector('#intro-target')
-                    const TargetEle = document.querySelector(target)
                     const IntroContent = document.querySelector(
                         '#intro-content'
                     )
-                    let padding = this.padding
                     function flowFunc() {
                         // console.log(targetRect)
                         // window.scrollTo(0, TargetEle.offsetTop)
                         // console.log(document.body.scrollTop)
                         // console.log(TargetEle.offsetTop)
+                        const TargetEle = document.querySelector(target)
                         TargetEle.classList.toggle('introjs-relativePosition')
                         if (
                             TargetEle.getBoundingClientRect().top <= 0 ||
@@ -67,6 +68,7 @@ export default {
                             document.documentElement.scrollTop =
                                 TargetEle.offsetTop - 100
                         }
+
                         if (
                             TargetEle.offsetTop <
                             (document.documentElement.clientHeight ||
@@ -74,35 +76,55 @@ export default {
                         ) {
                             document.documentElement.scrollTop = 0
                         }
+
                         let targetRect = TargetEle.getBoundingClientRect()
 
-                        let { width, height, left, top, right } = targetRect
+                        let {
+                            width,
+                            height,
+                            left,
+                            top,
+                            right,
+                            bottom,
+                        } = targetRect
+
+                        IntroContent.classList.remove('intro-content-top')
+                        IntroContent.classList.remove('intro-content-right')
+                        IntroContent.classList.remove('intro-content-left')
+                        IntroContent.classList.remove('intro-content-bottom')
+                        IntroContent.classList.remove('intro-content-center')
+
                         if (
+                            width >=
+                                (document.documentElement.clientWidth / 2 ||
+                                    document.body.offsetWclientWidth / 2) &&
+                            bottom >
+                                (document.documentElement.clientHeight / 2 ||
+                                    document.body.offsetWclientHeight / 2)
+                        ) {
+                            IntroContent.classList.add('intro-content-center')
+                            IntroContent.classList.add('intro-content-top')
+                        } else if (
+                            width >=
+                            (document.documentElement.clientWidth / 2 ||
+                                document.body.offsetWclientWidth / 2)
+                        ) {
+                            IntroContent.classList.add('intro-content-center')
+                            IntroContent.classList.add('intro-content-bottom')
+                        } else if (
                             right >
                             (document.documentElement.clientWidth / 2 ||
                                 document.body.offsetWclientWidth / 2)
                         ) {
-                            IntroContent.classList.remove('intro-content-left')
                             IntroContent.classList.add('intro-content-right')
                         } else {
-                            IntroContent.classList.remove('intro-content-right')
                             IntroContent.classList.add('intro-content-left')
                         }
-                        if (
-                            top + IntroContent.getBoundingClientRect().height >=
-                            (document.documentElement.clientHeight ||
-                                document.body.offsetHeight)
-                        ) {
-                            IntroContent.classList.add('intro-content-top')
-                        } else {
-                            IntroContent.classList.remove('intro-content-top')
-                        }
 
-                        IntroTarget.style.width = width + 'px'
-                        IntroTarget.style.height = height + 'px'
-                        IntroTarget.style.left = left - 5 - padding + 'px'
-                        IntroTarget.style.top = top - 5 - padding + 'px'
-                        IntroTarget.style.padding = padding + 'px'
+                        IntroTarget.style.width = width + 10 + 'px'
+                        IntroTarget.style.height = height + 10 + 'px'
+                        IntroTarget.style.left = left - 5 + 'px'
+                        IntroTarget.style.top = top - 5 + 'px'
 
                         if (typeof curfunc === 'function') {
                             curfunc()
@@ -122,6 +144,7 @@ export default {
                         }
                         _this.curContent = content
                         _this.curTaget = TargetEle
+                        _this.elems.push(TargetEle)
                     }
                     this.flowsFuncs.push(flowFunc)
                 }
@@ -131,7 +154,7 @@ export default {
     },
     methods: {
         start() {
-            document.documentElement.style.overflow = 'hidden'
+            // document.documentElement.style.overflow = 'hidden'
             this.step = 0
             this.flowsFuncs[this.step]()
         },
@@ -158,25 +181,30 @@ export default {
         end() {},
     },
     destroyed() {
+        this.elems.forEach((dom) => {
+            dom.classList.remove('introjs-relativePosition')
+        })
         document.documentElement.style.overflow = 'auto'
         document.documentElement.scrollTop = 0
     },
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+@import '@/assets/scss/_mixin.scss';
 .intro-cover {
     position: fixed;
     left: 0;
     top: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.393);
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 997;
 }
 .intro-target {
     position: absolute;
-    border: 5px solid rgb(57, 12, 12);
     z-index: 999;
+    border: 5px solid rgb(181, 11, 11);
 }
 
 .intro-content-left {
@@ -188,12 +216,24 @@ export default {
 }
 
 .intro-content-top {
-    transform: translateY(-100%);
+    top: 0;
+    transform: translate(-50%, calc(-100% - 12px));
+}
+
+.intro-content-center {
+    left: 50%;
+}
+
+.intro-content-bottom {
+    top: calc(100% + 15px);
+    transform: translateX(-50%);
 }
 
 .intro-content {
     position: absolute;
     background-color: #fff;
+    border: 5px solid $primary;
+    border-radius: 5px;
     word-wrap: break-word;
     max-width: 300px;
     min-width: 200px;
@@ -212,7 +252,7 @@ export default {
     padding: 10px;
 }
 .introjs-relativePosition {
-    position: relative;
-    z-index: 9999 !important;
+    position: relative !important;
+    z-index: 998 !important;
 }
 </style>
