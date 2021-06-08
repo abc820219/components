@@ -69,13 +69,13 @@ export default {
                                 TargetEle.offsetTop - 100
                         }
 
-                        if (
-                            TargetEle.offsetTop <
-                            (document.documentElement.clientHeight ||
-                                document.body.offsetHeight)
-                        ) {
-                            document.documentElement.scrollTop = 0
-                        }
+                        // if (
+                        //     TargetEle.offsetTop <
+                        //     (document.documentElement.clientHeight ||
+                        //         document.body.offsetHeight)
+                        // ) {
+                        //     document.documentElement.scrollTop = 0
+                        // }
 
                         let targetRect = TargetEle.getBoundingClientRect()
 
@@ -121,26 +121,26 @@ export default {
                             IntroContent.classList.add('intro-content-left')
                         }
 
-                        IntroTarget.style.width = width + 10 + 'px'
-                        IntroTarget.style.height = height + 10 + 'px'
-                        IntroTarget.style.left = left - 5 + 'px'
-                        IntroTarget.style.top = top - 5 + 'px'
+                        IntroTarget.style.width = width + 20 + 'px'
+                        IntroTarget.style.height = height + 20 + 'px'
+                        IntroTarget.style.left = left - 10 + 'px'
+                        IntroTarget.style.top = top - 10 + 'px'
 
                         if (typeof curfunc === 'function') {
-                            curfunc()
+                            curfunc(TargetEle)
                         }
 
                         _this.curNextFunc = () => {
                             TargetEle.classList.toggle(
                                 'introjs-relativePosition'
                             )
-                            nextfunc()
+                            nextfunc(TargetEle)
                         }
                         _this.curPreFunc = () => {
                             TargetEle.classList.toggle(
                                 'introjs-relativePosition'
                             )
-                            prefunc()
+                            prefunc(TargetEle)
                         }
                         _this.curContent = content
                         _this.curTaget = TargetEle
@@ -154,7 +154,7 @@ export default {
     },
     methods: {
         start() {
-            // document.documentElement.style.overflow = 'hidden'
+            document.documentElement.style.overflow = 'hidden'
             this.step = 0
             this.flowsFuncs[this.step]()
         },
@@ -199,25 +199,29 @@ export default {
     right: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.2);
-    z-index: 997;
+    z-index: 998;
 }
 .intro-target {
     position: absolute;
     z-index: 999;
     border: 5px solid rgb(181, 11, 11);
+    border-radius: 5px;
+    transition: all 0.5s;
 }
 
 .intro-content-left {
-    left: calc(100% + 12px);
+    left: calc(120%);
+    top: 10px;
 }
 
 .intro-content-right {
-    right: calc(100% + 12px);
+    right: calc(120%);
+    top: 10px;
 }
 
 .intro-content-top {
     top: 0;
-    transform: translate(-50%, calc(-100% - 12px));
+    transform: translate(-50%, -120%);
 }
 
 .intro-content-center {
@@ -232,25 +236,23 @@ export default {
 .intro-content {
     position: absolute;
     background-color: #fff;
+    color: $primary;
+    font-weight: bold;
     border: 5px solid $primary;
     border-radius: 5px;
     word-wrap: break-word;
-    max-width: 300px;
-    min-width: 200px;
+    max-width: 500px;
+    min-width: 300px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-}
-.intro-title {
-    text-align: right;
     padding: 10px;
 }
+
 .intro-content-info {
-    padding: 10px;
+    padding: 15px 0;
 }
-.intro-options {
-    padding: 10px;
-}
+
 .introjs-relativePosition {
     position: relative !important;
     z-index: 998 !important;
