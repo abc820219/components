@@ -1,7 +1,11 @@
 <template>
   <div id="app">
     <ul class="menu">
-      <MenuItem :menu-list="menuList" />
+      <MenuItem
+        v-for="list in menuList"
+        :key="list"
+        :menu-list="list"
+      />
     </ul>
   </div>
 </template>
@@ -14,7 +18,7 @@ export default {
   },
   data () {
     return {
-      menuList: {
+      menuList: [{
         label: '24購物',
         children: [
           {
@@ -26,7 +30,7 @@ export default {
             ]
           }
         ]
-      }
+      }]
     }
   }
 }
