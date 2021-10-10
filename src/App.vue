@@ -1,32 +1,47 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <PreviewImg
+      :imgList="list"
+      :visible.sync="isPreview"
+      :activeIndex.sync="activeIndex"
+      width="1000px"
+      height="500px"
+    />
+    <img
+      v-for="(img, i) in list"
+      :src="img"
+      :key="img"
+      @click="preview(img, i)"
+      alt=""
+      style="width: 400px; height: 200px"
+    />
   </div>
 </template>
+<script>
+import PreviewImg from "@/components/PreviewImg";
+export default {
+  components: {
+    PreviewImg,
+  },
+  data() {
+    return {
+      list: [
+        "https://picsum.photos/id/684/600/400",
+        "https://picsum.photos/id/683/600/400",
+        "https://picsum.photos/id/682/600/400",
+      ],
+      currentImg: "",
+      isPreview: false,
+      activeIndex: 0,
+    };
+  },
+  methods: {
+    preview(src, i) {
+      this.currentImg = src;
+      this.isPreview = true;
+      this.activeIndex = i;
+    },
+  },
+};
+</script>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-</style>
